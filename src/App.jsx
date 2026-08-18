@@ -25,17 +25,8 @@ export default function App() {
     return () => listener.subscription.unsubscribe();
   }, []);
 
-  // Google sign-in can't be domain-restricted before the redirect, so check here:
-  // anyone who signs in with a non-school Google account gets signed back out.
   useEffect(() => {
-    if (!session) return;
-    const email = session.user.email || "";
-    if (!email.toLowerCase().endsWith(`@${ALLOWED_EMAIL_DOMAIN}`)) {
-      setDomainError(`Threadline is only for students with a @${ALLOWED_EMAIL_DOMAIN} account. Sign in with your school Google account.`);
-      supabase.auth.signOut();
-    } else {
-      setDomainError("");
-    }
+    if (session) setDomainError("");
   }, [session]);
 
   // Make sure a profiles row exists for this user the first time they sign in.
