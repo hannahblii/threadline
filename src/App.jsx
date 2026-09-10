@@ -11,6 +11,7 @@ import Notifications from "./components/Notifications";
 import Profile from "./components/Profile";
 import EditProfile from "./components/EditProfile";
 import InfoModal from "./components/InfoModal";
+import WelcomeAnimation from "./components/WelcomeAnimation";
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -29,6 +30,7 @@ export default function App() {
   const [newCampusName, setNewCampusName] = useState("");
   const [campusError, setCampusError] = useState("");
   const [showInfo, setShowInfo] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -62,14 +64,14 @@ export default function App() {
     ensureProfile();
   }, [session]);
 
-  // Show the "how it works" intro automatically the first time this account
-  // logs in. Tracked in localStorage so it never nags again after that —
-  // the header "?" button is there whenever someone wants it back.
+  // Show the welcome animation, then the "how it works" intro, the first
+  // time this account logs in. Tracked in localStorage so it never nags
+  // again after that — the header "?" button reopens the info screen alone.
   useEffect(() => {
     if (!session) return;
     const key = `closetcult_seen_intro_${session.user.id}`;
     if (!localStorage.getItem(key)) {
-      setShowInfo(true);
+      setShowWelcome(true);
       localStorage.setItem(key, "1");
     }
   }, [session]);
@@ -342,6 +344,14 @@ export default function App() {
       </nav>
 
       {showInfo && <InfoModal onClose={() => setShowInfo(false)} />}
+      {showWelcome && (
+        <WelcomeAnimation
+          onDone={() => {
+            setShowWelcome(false);
+            setShowInfo(true);
+          }}
+        />
+      )}
     </div>
   );
 }
