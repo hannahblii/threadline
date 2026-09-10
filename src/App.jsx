@@ -173,33 +173,33 @@ export default function App() {
               </div>
             )}
             <div>
-              <p className="font-black text-white leading-none">ClosetCult</p>
-              <select
-                value={campus || "UCLA"}
-                onChange={(e) => changeCampus(e.target.value)}
-                className="text-[11px] text-stone-400 leading-none mt-0.5 bg-transparent border-none p-0 -ml-0.5"
-              >
-                {CAMPUSES.map((c) => (
-                  <option key={c} value={c} className="bg-stone-900 text-white">
-                    {c} edition
-                  </option>
-                ))}
-              </select>
+              <p className="text-[11px] text-stone-400 leading-none">{session.user.email}</p>
+              <div className="flex items-center gap-2 mt-1">
+                <button
+                  onClick={() => setEditingOwnProfile(true)}
+                  className="flex items-center gap-1 text-xs text-stone-500 font-bold hover:text-emerald-400"
+                >
+                  <Pencil size={11} /> Edit profile
+                </button>
+                <button onClick={() => supabase.auth.signOut()} className="text-xs text-stone-500 font-bold hover:text-stone-300">
+                  Sign out
+                </button>
+              </div>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-[11px] text-stone-400 leading-none">{session.user.email}</p>
-            <div className="flex items-center justify-end gap-2 mt-1">
-              <button
-                onClick={() => setEditingOwnProfile(true)}
-                className="flex items-center gap-1 text-xs text-stone-500 font-bold hover:text-emerald-400"
-              >
-                <Pencil size={11} /> Edit profile
-              </button>
-              <button onClick={() => supabase.auth.signOut()} className="text-xs text-stone-500 font-bold hover:text-stone-300">
-                Sign out
-              </button>
-            </div>
+            <p className="font-black text-white leading-none">ClosetCult</p>
+            <select
+              value={campus || "UCLA"}
+              onChange={(e) => changeCampus(e.target.value)}
+              className="text-[11px] text-stone-400 leading-none mt-0.5 bg-transparent border-none p-0 text-right"
+            >
+              {CAMPUSES.map((c) => (
+                <option key={c} value={c} className="bg-stone-900 text-white">
+                  {c} edition
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </header>
