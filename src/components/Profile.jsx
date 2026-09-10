@@ -18,7 +18,7 @@ export default function Profile({ userId, session, onBack }) {
     async function load() {
       setLoading(true);
       const [{ data: p }, { data: itemsData }, swipesRes, savesRes] = await Promise.all([
-        supabase.from("profiles").select("name, dorm").eq("id", userId).maybeSingle(),
+        supabase.from("profiles").select("name, dorm, avatar_url").eq("id", userId).maybeSingle(),
         // RLS already restricts this to items you're actually allowed to see
         // (campus-wide, or a circle you share with them).
         supabase.from("items").select("*").eq("owner_id", userId).eq("status", "available").order("created_at", { ascending: false }),
@@ -81,8 +81,12 @@ export default function Profile({ userId, session, onBack }) {
       {!loading && profile && (
         <>
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-14 h-14 rounded-full bg-emerald-700 flex items-center justify-center text-white font-bold text-xl shrink-0">
-              {profile.name?.[0]?.toUpperCase() || <User size={22} />}
+            <div className="w-14 h-14 rounded-full bg-emerald-700 flex items-center justify-center text-white font-bold text-xl shrink-0 overflow-hidden">
+              {profile.avatar_url ? (
+                <img src={profile.avatar_url} alt={profile.name} className="w-full h-full object-cover" />
+              ) : (
+                profile.name?.[0]?.toUpperCase() || <User size={22} />
+              )}
             </div>
             <div>
               <p className="font-black text-white text-lg leading-tight">{profile.name}</p>

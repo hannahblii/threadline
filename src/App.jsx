@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ArrowLeftRight, Repeat, Users, Tag, MessageCircle, Bookmark, Bell } from "lucide-react";
+import { ArrowLeftRight, Repeat, Users, Tag, MessageCircle, Bookmark, Bell, Pencil } from "lucide-react";
 import { supabase } from "./lib/supabaseClient";
 import Auth from "./components/Auth";
 import Browse from "./components/Browse";
@@ -9,6 +9,7 @@ import Matches from "./components/Matches";
 import Wishlist from "./components/Wishlist";
 import Notifications from "./components/Notifications";
 import Profile from "./components/Profile";
+import EditProfile from "./components/EditProfile";
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -18,6 +19,8 @@ export default function App() {
   const [pendingConversationId, setPendingConversationId] = useState(null);
   const [unreadCount, setUnreadCount] = useState(0);
   const [viewingProfileId, setViewingProfileId] = useState(null);
+  const [editingOwnProfile, setEditingOwnProfile] = useState(false);
+  const [myProfile, setMyProfile] = useState(null);
   const [campus, setCampus] = useState(null);
   const [officialCircleId, setOfficialCircleId] = useState(null);
   const CAMPUSES = ["UCLA", "UCSD", "UT Austin"];
@@ -52,6 +55,16 @@ export default function App() {
       }
     }
     ensureProfile();
+  }, [session]);
+
+  useEffect(() => {
+    if (!session) return;
+    supabase
+      .from("profiles")
+      .select("name, avatar_url")
+      .eq("id", session.user.id)
+      .maybeSingle()
+      .then(({ data }) => setMyProfile(data));
   }, [session]);
 
   // Load the user's campus once their profile exists.
@@ -152,9 +165,13 @@ export default function App() {
       <header className="border-b border-stone-800 bg-stone-950 px-4 py-4">
         <div className="max-w-md mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-700 flex items-center justify-center">
-              <ArrowLeftRight className="text-white" size={16} />
-            </div>
+            {myProfile?.avatar_url ? (
+              <img src={myProfile.avatar_url} alt="You" className="w-8 h-8 rounded-lg object-cover" />
+            ) : (
+              <div className="w-8 h-8 rounded-lg bg-emerald-700 flex items-center justify-center">
+                <ArrowLeftRight className="text-white" size={16} />
+              </div>
+            )}
             <div>
               <p className="font-black text-white leading-none">ClosetCult</p>
               <select
@@ -172,9 +189,17 @@ export default function App() {
           </div>
           <div className="text-right">
             <p className="text-[11px] text-stone-400 leading-none">{session.user.email}</p>
-            <button onClick={() => supabase.auth.signOut()} className="text-xs text-stone-500 font-bold mt-1 hover:text-stone-300">
-              Sign out
-            </button>
+            <div className="flex items-center justify-end gap-2 mt-1">
+              <button
+                onClick={() => setEditingOwnProfile(true)}
+                className="flex items-center gap-1 text-xs text-stone-500 font-bold hover:text-emerald-400"
+              >
+                <Pencil size={11} /> Edit profile
+              </button>
+              <button onClick={() => supabase.auth.signOut()} className="text-xs text-stone-500 font-bold hover:text-stone-300">
+                Sign out
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -182,6 +207,12 @@ export default function App() {
       <main className="max-w-md mx-auto px-4 py-5 pb-24">
         {viewingProfileId ? (
           <Profile userId={viewingProfileId} session={session} onBack={() => setViewingProfileId(null)} />
+        ) : editingOwnProfile ? (
+          <EditProfile
+            session={session}
+            onBack={() => setEditingOwnProfile(false)}
+            onSaved={(updated) => setMyProfile(updated)}
+          />
         ) : (
           <>
             {tab === "browse" && (
