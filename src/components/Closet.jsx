@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Plus } from "lucide-react";
+import { Plus, Pencil, User } from "lucide-react";
 import { supabase } from "../lib/supabaseClient";
 import ItemCard, { CATEGORY_COLORS, TYPE_LABEL } from "./ItemCard";
 
@@ -13,7 +13,7 @@ const BLANK_FORM = {
   circle_id: "",
 };
 
-export default function Closet({ session, campus, officialCircleId }) {
+export default function Closet({ session, campus, officialCircleId, myProfile, onEditProfile }) {
   const userId = session.user.id;
   const [items, setItems] = useState([]);
   const [circles, setCircles] = useState([]);
@@ -144,6 +144,29 @@ export default function Closet({ session, campus, officialCircleId }) {
 
   return (
     <div>
+      <div className="flex items-center gap-3 pb-4 mb-4 border-b border-stone-800">
+        <div className="w-11 h-11 rounded-full bg-emerald-700 flex items-center justify-center text-white font-bold overflow-hidden shrink-0">
+          {myProfile?.avatar_url ? (
+            <img src={myProfile.avatar_url} alt="You" className="w-full h-full object-cover" />
+          ) : (
+            myProfile?.name?.[0]?.toUpperCase() || <User size={18} />
+          )}
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm text-white font-bold truncate">{myProfile?.name || session.user.email}</p>
+          <p className="text-[11px] text-stone-500 truncate">{session.user.email}</p>
+        </div>
+        <button
+          onClick={onEditProfile}
+          className="flex items-center gap-1 text-xs text-stone-400 font-bold hover:text-emerald-400 py-2 px-2"
+        >
+          <Pencil size={12} /> Edit
+        </button>
+        <button onClick={() => supabase.auth.signOut()} className="text-xs text-stone-400 font-bold hover:text-stone-200 py-2 px-2">
+          Sign out
+        </button>
+      </div>
+
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-black text-xl text-white">My closet</h2>
         <button

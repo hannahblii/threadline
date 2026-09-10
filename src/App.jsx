@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ArrowLeftRight, Repeat, Users, Tag, MessageCircle, Bookmark, Bell, Pencil } from "lucide-react";
+import { ArrowLeftRight, Repeat, Users, Tag, MessageCircle, Bookmark, Bell } from "lucide-react";
 import { supabase } from "./lib/supabaseClient";
 import Auth from "./components/Auth";
 import Browse from "./components/Browse";
@@ -162,45 +162,25 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-black">
-      <header className="border-b border-stone-800 bg-stone-950 px-4 py-4">
+      <header className="border-b border-stone-800 bg-stone-950 px-4 py-2.5">
         <div className="max-w-md mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-            {myProfile?.avatar_url ? (
-              <img src={myProfile.avatar_url} alt="You" className="w-8 h-8 rounded-lg object-cover" />
-            ) : (
-              <div className="w-8 h-8 rounded-lg bg-emerald-700 flex items-center justify-center">
-                <ArrowLeftRight className="text-white" size={16} />
-              </div>
-            )}
-            <div>
-              <p className="text-[11px] text-stone-400 leading-none">{session.user.email}</p>
-              <div className="flex items-center gap-1 mt-1 -ml-2">
-                <button
-                  onClick={() => setEditingOwnProfile(true)}
-                  className="flex items-center gap-1 text-xs text-stone-500 font-bold hover:text-emerald-400 py-2 px-2"
-                >
-                  <Pencil size={12} /> Edit profile
-                </button>
-                <button onClick={() => supabase.auth.signOut()} className="text-xs text-stone-500 font-bold hover:text-stone-300 py-2 px-2">
-                  Sign out
-                </button>
-              </div>
+            <div className="w-6 h-6 rounded-md bg-emerald-700 flex items-center justify-center shrink-0">
+              <ArrowLeftRight className="text-white" size={13} />
             </div>
+            <p className="font-black text-white text-sm leading-none">ClosetCult</p>
           </div>
-          <div className="text-right">
-            <p className="font-black text-white leading-none">ClosetCult</p>
-            <select
-              value={campus || "UCLA"}
-              onChange={(e) => changeCampus(e.target.value)}
-              className="text-[11px] text-stone-400 leading-none mt-0.5 bg-transparent border-none p-0 text-right"
-            >
-              {CAMPUSES.map((c) => (
-                <option key={c} value={c} className="bg-stone-900 text-white">
-                  {c} edition
-                </option>
-              ))}
-            </select>
-          </div>
+          <select
+            value={campus || "UCLA"}
+            onChange={(e) => changeCampus(e.target.value)}
+            className="text-[11px] text-emerald-400 font-bold leading-none bg-stone-900 border border-stone-700 rounded-full px-2.5 py-1"
+          >
+            {CAMPUSES.map((c) => (
+              <option key={c} value={c} className="bg-stone-900 text-white">
+                {c}
+              </option>
+            ))}
+          </select>
         </div>
       </header>
 
@@ -237,7 +217,15 @@ export default function App() {
             )}
             {tab === "wishlist" && <Wishlist session={session} onOpenMatch={openConversation} onViewProfile={setViewingProfileId} />}
             {tab === "circles" && <Circles session={session} campus={campus} onViewProfile={setViewingProfileId} />}
-            {tab === "closet" && <Closet session={session} campus={campus} officialCircleId={officialCircleId} />}
+            {tab === "closet" && (
+              <Closet
+                session={session}
+                campus={campus}
+                officialCircleId={officialCircleId}
+                myProfile={myProfile}
+                onEditProfile={() => setEditingOwnProfile(true)}
+              />
+            )}
           </>
         )}
       </main>
