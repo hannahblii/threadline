@@ -404,18 +404,21 @@ export default function Circles({ session, campus, onViewProfile }) {
         <p className="text-sm text-stone-500 mb-2">items here are only visible to this circle</p>
         <div className="grid grid-cols-2 gap-3">
           {activeItems.length ? (
-            activeItems.map((i) => (
-              <ItemCard
-                key={i.id}
-                item={i}
-                compact
-                onViewOwner={onViewProfile}
-                onLike={handleLike}
-                onSave={handleSave}
-                liked={likedIds.has(i.id)}
-                saved={savedIds.has(i.id)}
-              />
-            ))
+            activeItems.map((i) => {
+              const isMine = i.owner_id === userId;
+              return (
+                <ItemCard
+                  key={i.id}
+                  item={i}
+                  compact
+                  onViewOwner={onViewProfile}
+                  onLike={isMine ? undefined : handleLike}
+                  onSave={isMine ? undefined : handleSave}
+                  liked={likedIds.has(i.id)}
+                  saved={savedIds.has(i.id)}
+                />
+              );
+            })
           ) : (
             <p className="text-sm text-stone-500 col-span-2">No items listed in this circle yet.</p>
           )}
