@@ -6,6 +6,7 @@ export const CATEGORY_COLORS = {
   Dresses: "bg-amber-700",
   Denim: "bg-stone-700",
   Tops: "bg-emerald-600",
+  Bottoms: "bg-emerald-700",
   Formal: "bg-amber-800",
   Accessories: "bg-stone-600",
   Shoes: "bg-emerald-900",
