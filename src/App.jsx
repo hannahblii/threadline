@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ArrowLeftRight, Repeat, Users, Tag, MessageCircle, Bookmark, Bell } from "lucide-react";
+import { ArrowLeftRight, Repeat, Users, Tag, MessageCircle, Bookmark, Bell, HelpCircle } from "lucide-react";
 import { supabase } from "./lib/supabaseClient";
 import Auth from "./components/Auth";
 import Browse from "./components/Browse";
@@ -10,6 +10,7 @@ import Wishlist from "./components/Wishlist";
 import Notifications from "./components/Notifications";
 import Profile from "./components/Profile";
 import EditProfile from "./components/EditProfile";
+import InfoModal from "./components/InfoModal";
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -27,6 +28,7 @@ export default function App() {
   const [addingCampus, setAddingCampus] = useState(false);
   const [newCampusName, setNewCampusName] = useState("");
   const [campusError, setCampusError] = useState("");
+  const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -58,6 +60,18 @@ export default function App() {
       }
     }
     ensureProfile();
+  }, [session]);
+
+  // Show the "how it works" intro automatically the first time this account
+  // logs in. Tracked in localStorage so it never nags again after that —
+  // the header "?" button is there whenever someone wants it back.
+  useEffect(() => {
+    if (!session) return;
+    const key = `closetcult_seen_intro_${session.user.id}`;
+    if (!localStorage.getItem(key)) {
+      setShowInfo(true);
+      localStorage.setItem(key, "1");
+    }
   }, [session]);
 
   useEffect(() => {
@@ -203,6 +217,13 @@ export default function App() {
               <ArrowLeftRight className="text-white" size={13} />
             </div>
             <p className="font-black text-white text-sm leading-none">ClosetCult</p>
+            <button
+              onClick={() => setShowInfo(true)}
+              className="text-stone-500 hover:text-emerald-400 p-1.5 -ml-1"
+              title="How ClosetCult works"
+            >
+              <HelpCircle size={15} />
+            </button>
           </div>
           <select
             value={campus || "UCLA"}
@@ -319,6 +340,8 @@ export default function App() {
           ))}
         </div>
       </nav>
+
+      {showInfo && <InfoModal onClose={() => setShowInfo(false)} />}
     </div>
   );
 }
