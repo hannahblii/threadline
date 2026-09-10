@@ -273,7 +273,7 @@ function ConversationRow({ conversation, onOpen, onViewProfile }) {
   return (
     <button
       onClick={() => onOpen(conversation)}
-      className={`relative w-full text-left border rounded-xl p-3 flex items-center gap-3 transition-colors ${
+      className={`relative w-full text-left border rounded-xl px-3 py-5 flex items-center gap-3 transition-colors ${
         s ? s.row : "border-stone-800 hover:border-emerald-700"
       }`}
     >
@@ -283,15 +283,15 @@ function ConversationRow({ conversation, onOpen, onViewProfile }) {
         {conversation.items.map((item, idx) => (
           <div
             key={item.id}
-            className={`w-10 h-10 rounded-full border-2 overflow-hidden bg-stone-800 flex items-center justify-center ${
+            className={`w-12 h-12 rounded-full border-2 overflow-hidden bg-stone-800 flex items-center justify-center ${
               idx === selectedIdx ? "border-emerald-500 z-10" : "border-stone-950"
             }`}
-            style={{ marginLeft: idx === 0 ? 0 : -14 }}
+            style={{ marginLeft: idx === 0 ? 0 : -16 }}
           >
             {item.photo_url ? (
               <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover" />
             ) : (
-              <Shirt size={16} className="text-white/70" />
+              <Shirt size={19} className="text-white/70" />
             )}
           </div>
         ))}
@@ -305,7 +305,7 @@ function ConversationRow({ conversation, onOpen, onViewProfile }) {
               e.stopPropagation();
               onViewProfile(conversation.otherId);
             }}
-            className="font-bold text-white text-sm truncate hover:underline block"
+            className="inline-block max-w-full font-bold text-white text-sm truncate hover:underline"
           >
             {conversation.otherName}
           </span>
