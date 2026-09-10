@@ -23,7 +23,10 @@ export default function App() {
   const [myProfile, setMyProfile] = useState(null);
   const [campus, setCampus] = useState(null);
   const [officialCircleId, setOfficialCircleId] = useState(null);
-  const CAMPUSES = ["UCLA", "UCSD", "UT Austin"];
+  const [campusList, setCampusList] = useState([]);
+  const [addingCampus, setAddingCampus] = useState(false);
+  const [newCampusName, setNewCampusName] = useState("");
+  const [campusError, setCampusError] = useState("");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -114,6 +117,35 @@ export default function App() {
     // since it re-runs whenever `campus` changes.
   }
 
+  useEffect(() => {
+    if (!session) return;
+    loadCampusList();
+  }, [session]);
+
+  async function loadCampusList() {
+    const { data } = await supabase.from("campuses").select("name").order("name");
+    setCampusList((data || []).map((c) => c.name));
+  }
+
+  async function createCampusEdition() {
+    const name = newCampusName.trim();
+    if (!name) return;
+    setCampusError("");
+    const { data, error } = await supabase.rpc("create_campus_edition", { p_name: name });
+    if (error) {
+      console.error(error);
+      setCampusError(error.message.includes("empty") ? "Enter a school name." : "Couldn't add that school — try again.");
+      return;
+    }
+    if (data) {
+      await loadCampusList();
+      setCampus(name);
+      setOfficialCircleId(data);
+      setNewCampusName("");
+      setAddingCampus(false);
+    }
+  }
+
   // Track unread notification count for the nav badge, live.
   useEffect(() => {
     if (!session) return;
@@ -174,16 +206,48 @@ export default function App() {
           </div>
           <select
             value={campus || "UCLA"}
-            onChange={(e) => changeCampus(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value === "__add_new__") setAddingCampus(true);
+              else changeCampus(e.target.value);
+            }}
             className="text-[11px] text-emerald-400 font-bold leading-none bg-stone-900 border border-stone-700 rounded-full px-2.5 py-1"
           >
-            {CAMPUSES.map((c) => (
+            {campusList.map((c) => (
               <option key={c} value={c} className="bg-stone-900 text-white">
                 {c}
               </option>
             ))}
+            <option value="__add_new__" className="bg-stone-900 text-emerald-400">
+              + Add your school
+            </option>
           </select>
         </div>
+        {addingCampus && (
+          <div className="max-w-md mx-auto mt-2 flex items-center gap-2">
+            <input
+              autoFocus
+              value={newCampusName}
+              onChange={(e) => setNewCampusName(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && createCampusEdition()}
+              placeholder="Your school's name"
+              className="flex-1 bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-sm text-white placeholder-stone-500"
+            />
+            <button onClick={createCampusEdition} className="bg-emerald-700 text-white rounded-lg px-3 py-2 text-sm font-bold">
+              Create
+            </button>
+            <button
+              onClick={() => {
+                setAddingCampus(false);
+                setNewCampusName("");
+                setCampusError("");
+              }}
+              className="text-stone-500 text-sm font-bold px-2 py-2"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
+        {campusError && <p className="max-w-md mx-auto text-xs text-red-400 mt-1">{campusError}</p>}
       </header>
 
       <main className="max-w-md mx-auto px-4 py-5 pb-24">
