@@ -269,18 +269,18 @@ export default function Swipe({ session, campus, officialCircleId, onGoToMatches
         </div>
       </div>
 
-      <div className="flex gap-6">
+      <div className="flex gap-8">
         <button
           onClick={() => decide("pass")}
-          className="w-14 h-14 rounded-full border-2 border-stone-700 flex items-center justify-center text-stone-500 hover:border-stone-500 transition-colors"
+          className="w-16 h-16 rounded-full border-2 border-stone-700 flex items-center justify-center text-stone-500 hover:border-stone-500 active:scale-95 transition-all"
         >
-          <X size={26} />
+          <X size={28} />
         </button>
         <button
           onClick={() => decide("like")}
-          className="w-14 h-14 rounded-full border-2 border-emerald-600 flex items-center justify-center text-emerald-700 hover:bg-emerald-50 transition-colors"
+          className="w-16 h-16 rounded-full border-2 border-emerald-600 flex items-center justify-center text-emerald-500 hover:bg-emerald-950 active:scale-95 transition-all"
         >
-          <Heart size={24} />
+          <Heart size={26} />
         </button>
       </div>
       <p className="text-xs text-stone-500 mt-4">Drag the card, or use the buttons · {matchCount} matches so far</p>

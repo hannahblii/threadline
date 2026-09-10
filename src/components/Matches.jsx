@@ -179,9 +179,9 @@ function ThreadView({ conversation, session, onBack, onViewProfile }) {
                 {item.status === "active" && (
                   <button
                     onClick={() => requestComplete(item.id)}
-                    className="flex items-center gap-1 text-xs font-bold text-emerald-400 border border-emerald-700 rounded-lg px-2 py-1.5 shrink-0"
+                    className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 border border-emerald-700 rounded-lg px-3 py-2.5 shrink-0"
                   >
-                    <CheckCircle2 size={13} /> Confirm Transaction
+                    <CheckCircle2 size={14} /> Confirm Transaction
                   </button>
                 )}
               </div>
@@ -219,10 +219,10 @@ function ThreadView({ conversation, session, onBack, onViewProfile }) {
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && send()}
           placeholder="Message..."
-          className="flex-1 bg-stone-950 border border-stone-700 rounded-lg px-3 py-2 text-sm text-white placeholder-stone-500"
+          className="flex-1 bg-stone-950 border border-stone-700 rounded-lg px-3.5 py-3 text-sm text-white placeholder-stone-500"
         />
-        <button onClick={send} className="bg-emerald-700 text-white rounded-lg px-3 flex items-center justify-center">
-          <Send size={16} />
+        <button onClick={send} className="bg-emerald-700 text-white rounded-lg px-4 flex items-center justify-center">
+          <Send size={19} />
         </button>
       </div>
 
@@ -234,10 +234,10 @@ function ThreadView({ conversation, session, onBack, onViewProfile }) {
             <p className="text-sm text-stone-400 mt-1">{conversation.otherName} marked this transaction as complete.</p>
             {txError && <p className="text-xs text-red-400 mt-2">{txError}</p>}
             <div className="flex gap-2 mt-4">
-              <button onClick={() => respond(false)} className="flex-1 border border-stone-700 text-stone-300 rounded-lg py-2 text-sm font-bold">
+              <button onClick={() => respond(false)} className="flex-1 border border-stone-700 text-stone-300 rounded-lg py-3 text-sm font-bold">
                 Not yet
               </button>
-              <button onClick={() => respond(true)} className="flex-1 bg-emerald-700 text-white rounded-lg py-2 text-sm font-bold">
+              <button onClick={() => respond(true)} className="flex-1 bg-emerald-700 text-white rounded-lg py-3 text-sm font-bold">
                 Confirm
               </button>
             </div>

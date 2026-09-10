@@ -119,7 +119,7 @@ export default function EditProfile({ session, onBack, onSaved }) {
           <button
             onClick={save}
             disabled={saving}
-            className="w-full bg-emerald-700 text-white rounded-lg py-2 text-sm font-bold disabled:opacity-60"
+            className="w-full bg-emerald-700 text-white rounded-lg py-3 text-sm font-bold disabled:opacity-60"
           >
             {saving ? "Saving..." : "Save changes"}
           </button>

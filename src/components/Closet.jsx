@@ -148,7 +148,7 @@ export default function Closet({ session, campus, officialCircleId }) {
         <h2 className="font-black text-xl text-white">My closet</h2>
         <button
           onClick={() => (adding ? cancelForm() : startAdd())}
-          className="flex items-center gap-1 text-sm font-bold text-emerald-400 border border-emerald-700 rounded-lg px-3 py-1.5"
+          className="flex items-center gap-1.5 text-sm font-bold text-emerald-400 border border-emerald-700 rounded-lg px-4 py-2.5"
         >
           <Plus size={14} /> {adding ? "Cancel" : "Add item"}
         </button>
@@ -185,7 +185,7 @@ export default function Closet({ session, campus, officialCircleId }) {
                     key={t}
                     type="button"
                     onClick={() => toggleType(t)}
-                    className={`text-xs font-bold px-3 py-1.5 rounded-lg border ${
+                    className={`text-sm font-bold px-4 py-2.5 rounded-lg border ${
                       checked ? "bg-emerald-700 text-white border-emerald-700" : "border-stone-700 text-stone-400"
                     }`}
                   >
@@ -245,7 +245,7 @@ export default function Closet({ session, campus, officialCircleId }) {
           <button
             onClick={submit}
             disabled={saving || form.listingTypes.length === 0}
-            className="w-full bg-emerald-700 text-white rounded-lg py-2 text-sm font-bold disabled:opacity-60"
+            className="w-full bg-emerald-700 text-white rounded-lg py-3 text-sm font-bold disabled:opacity-60"
           >
             {saving ? "Saving..." : editingId ? "Save changes" : "List item"}
           </button>

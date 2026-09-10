@@ -27,7 +27,7 @@ function MembersList({ circleId, onViewProfile }) {
           key={m.id}
           onClick={() => onViewProfile?.(m.id)}
           disabled={!onViewProfile}
-          className="w-full text-left flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-stone-800 disabled:hover:bg-transparent"
+          className="w-full text-left flex items-center gap-2 py-2.5 px-2 rounded-lg hover:bg-stone-800 disabled:hover:bg-transparent"
         >
           <div className="w-6 h-6 rounded-full bg-emerald-700 flex items-center justify-center text-white text-[10px] font-bold shrink-0">
             {m.name?.[0]?.toUpperCase() || "?"}
@@ -131,8 +131,8 @@ function CircleChat({ circleId, userId }) {
           placeholder="Message the circle..."
           className="flex-1 bg-stone-950 border border-stone-700 rounded-lg px-3 py-2 text-sm text-white placeholder-stone-500"
         />
-        <button onClick={send} className="bg-emerald-700 text-white rounded-lg px-3 flex items-center justify-center">
-          <Send size={16} />
+        <button onClick={send} className="bg-emerald-700 text-white rounded-lg px-4 flex items-center justify-center">
+          <Send size={18} />
         </button>
       </div>
     </div>
@@ -296,15 +296,15 @@ export default function Circles({ session, campus, onViewProfile }) {
             <h2 className="font-black text-xl text-white">{active.name}</h2>
             {active.is_private ? <Lock size={14} className="text-stone-500" /> : <Globe size={14} className="text-stone-500" />}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 -mr-2">
             {isMember && (
-              <button onClick={() => leaveCircle(active)} className="flex items-center gap-1 text-xs font-bold text-stone-400 hover:text-red-400">
-                <LogOut size={12} /> Leave
+              <button onClick={() => leaveCircle(active)} className="flex items-center gap-1.5 text-sm font-bold text-stone-400 hover:text-red-400 py-2 px-2.5">
+                <LogOut size={14} /> Leave
               </button>
             )}
             {isOwner && (
-              <button onClick={() => deleteCircle(active)} className="flex items-center gap-1 text-xs font-bold text-stone-400 hover:text-red-400">
-                <Trash2 size={12} /> Delete
+              <button onClick={() => deleteCircle(active)} className="flex items-center gap-1.5 text-sm font-bold text-stone-400 hover:text-red-400 py-2 px-2.5">
+                <Trash2 size={14} /> Delete
               </button>
             )}
           </div>
@@ -330,9 +330,9 @@ export default function Circles({ session, campus, onViewProfile }) {
             </div>
             <button
               onClick={() => navigator.clipboard?.writeText(circleCode)}
-              className="flex items-center gap-1 text-xs font-bold text-emerald-400 border border-emerald-700 rounded-lg px-2 py-1.5"
+              className="flex items-center gap-1.5 text-sm font-bold text-emerald-400 border border-emerald-700 rounded-lg px-3.5 py-2.5"
             >
-              <Copy size={12} /> Copy
+              <Copy size={14} /> Copy
             </button>
           </div>
         )}
@@ -347,9 +347,7 @@ export default function Circles({ session, campus, onViewProfile }) {
                 placeholder="Invite code"
                 className="flex-1 bg-stone-950 border border-stone-700 rounded-lg px-3 py-2 text-sm text-white placeholder-stone-500"
               />
-              <button onClick={() => joinPrivateCircle(active)} className="bg-emerald-700 text-white rounded-lg px-4 text-sm font-bold">
-                Join
-              </button>
+              <button onClick={() => joinPrivateCircle(active)} className="bg-emerald-700 text-white rounded-lg px-5 py-2.5 text-sm font-bold">Join</button>
             </div>
             {joinError && <p className="text-xs text-red-400 mt-2">{joinError}</p>}
           </div>
@@ -358,7 +356,7 @@ export default function Circles({ session, campus, onViewProfile }) {
         {!isMember && !active.is_private && (
           <button
             onClick={() => joinPublicCircle(active.id)}
-            className="w-full bg-emerald-700 text-white rounded-lg py-2 text-sm font-bold mb-4"
+            className="w-full bg-emerald-700 text-white rounded-lg py-3 text-sm font-bold mb-4"
           >
             Join circle
           </button>
@@ -382,7 +380,7 @@ export default function Circles({ session, campus, onViewProfile }) {
         <h2 className="font-black text-xl text-white">Circles</h2>
         <button
           onClick={() => setCreating((v) => !v)}
-          className="flex items-center gap-1 text-sm font-bold text-emerald-400 border border-emerald-700 rounded-lg px-3 py-1.5"
+          className="flex items-center gap-1.5 text-sm font-bold text-emerald-400 border border-emerald-700 rounded-lg px-4 py-2.5"
         >
           <Plus size={14} /> New circle
         </button>
@@ -399,7 +397,7 @@ export default function Circles({ session, campus, onViewProfile }) {
           <div className="flex gap-2">
             <button
               onClick={() => setIsPrivate(false)}
-              className={`flex-1 flex items-center justify-center gap-1 text-xs font-bold py-1.5 rounded-lg border ${
+              className={`flex-1 flex items-center justify-center gap-1.5 text-sm font-bold py-2.5 rounded-lg border ${
                 !isPrivate ? "bg-emerald-700 text-white border-emerald-700" : "border-stone-700 text-stone-400"
               }`}
             >
@@ -407,7 +405,7 @@ export default function Circles({ session, campus, onViewProfile }) {
             </button>
             <button
               onClick={() => setIsPrivate(true)}
-              className={`flex-1 flex items-center justify-center gap-1 text-xs font-bold py-1.5 rounded-lg border ${
+              className={`flex-1 flex items-center justify-center gap-1.5 text-sm font-bold py-2.5 rounded-lg border ${
                 isPrivate ? "bg-emerald-700 text-white border-emerald-700" : "border-stone-700 text-stone-400"
               }`}
             >
@@ -415,7 +413,7 @@ export default function Circles({ session, campus, onViewProfile }) {
             </button>
           </div>
           {isPrivate && <p className="text-[11px] text-stone-500">A random invite code will be generated — share it to let people in.</p>}
-          <button onClick={createCircle} className="w-full bg-emerald-700 text-white rounded-lg py-2 text-sm font-bold">
+          <button onClick={createCircle} className="w-full bg-emerald-700 text-white rounded-lg py-3 text-sm font-bold">
             Create
           </button>
         </div>

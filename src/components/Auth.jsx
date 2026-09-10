@@ -45,7 +45,7 @@ export default function Auth({ errorMessage }) {
         <button
           onClick={signInWithGoogle}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 border border-stone-700 rounded-lg py-2.5 text-sm font-bold text-white hover:bg-stone-800 disabled:opacity-60"
+          className="w-full flex items-center justify-center gap-2 border border-stone-700 rounded-lg py-3.5 text-sm font-bold text-white hover:bg-stone-800 disabled:opacity-60"
         >
           <svg width="16" height="16" viewBox="0 0 48 48" aria-hidden="true">
             <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l6-6C33.6 5.1 29 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21 21-9.4 21-21c0-1.2-.1-2.4-.4-3.5z"/>

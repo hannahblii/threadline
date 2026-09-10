@@ -174,14 +174,14 @@ export default function App() {
             )}
             <div>
               <p className="text-[11px] text-stone-400 leading-none">{session.user.email}</p>
-              <div className="flex items-center gap-2 mt-1">
+              <div className="flex items-center gap-1 mt-1 -ml-2">
                 <button
                   onClick={() => setEditingOwnProfile(true)}
-                  className="flex items-center gap-1 text-xs text-stone-500 font-bold hover:text-emerald-400"
+                  className="flex items-center gap-1 text-xs text-stone-500 font-bold hover:text-emerald-400 py-2 px-2"
                 >
-                  <Pencil size={11} /> Edit profile
+                  <Pencil size={12} /> Edit profile
                 </button>
-                <button onClick={() => supabase.auth.signOut()} className="text-xs text-stone-500 font-bold hover:text-stone-300">
+                <button onClick={() => supabase.auth.signOut()} className="text-xs text-stone-500 font-bold hover:text-stone-300 py-2 px-2">
                   Sign out
                 </button>
               </div>
@@ -248,12 +248,12 @@ export default function App() {
             <button
               key={t.id}
               onClick={() => goToTab(t.id)}
-              className={`relative flex flex-col items-center gap-1 py-2.5 text-[10px] font-bold ${
+              className={`relative flex flex-col items-center gap-1 py-3.5 min-h-[56px] text-[10px] font-bold ${
                 tab === t.id ? "text-emerald-400" : "text-stone-500"
               }`}
             >
               <span className="relative">
-                <t.icon size={17} strokeWidth={tab === t.id ? 2.5 : 2} />
+                <t.icon size={20} strokeWidth={tab === t.id ? 2.5 : 2} />
                 {t.badge > 0 && (
                   <span className="absolute -top-1.5 -right-2 min-w-[15px] h-[15px] px-1 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
                     {t.badge > 9 ? "9+" : t.badge}

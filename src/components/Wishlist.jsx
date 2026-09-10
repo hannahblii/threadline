@@ -75,7 +75,7 @@ export default function Wishlist({ session, onOpenMatch, onViewProfile }) {
                   <button
                     onClick={() => onOpenMatch?.(match.conversation_id)}
                     disabled={!match.conversation_id}
-                    className="w-full mt-1.5 flex items-center justify-center gap-1 text-xs font-bold text-emerald-400 border border-emerald-700 rounded-lg py-1.5 disabled:opacity-50"
+                    className="w-full mt-1.5 flex items-center justify-center gap-1.5 text-xs font-bold text-emerald-400 border border-emerald-700 rounded-lg py-2.5 disabled:opacity-50"
                   >
                     <MessageCircle size={12} />{" "}
                     {match.status === "closed" && "Open chat (closed)"}

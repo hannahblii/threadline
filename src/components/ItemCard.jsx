@@ -58,23 +58,23 @@ export default function ItemCard({ item, compact, onDelete, onEdit, onLike, onSa
         )}
       </div>
       {!isCompleted && <TagStack item={item} />}
-      <div className="absolute top-2 left-2 flex gap-1">
+      <div className="absolute top-2 left-2 flex gap-1.5">
         {onEdit && (
           <button
             onClick={() => onEdit(item)}
-            className="w-7 h-7 rounded-full bg-stone-950/80 border border-stone-700 flex items-center justify-center text-stone-300 hover:text-emerald-400 hover:border-emerald-400 transition-colors"
+            className="w-10 h-10 rounded-full bg-stone-950/80 border border-stone-700 flex items-center justify-center text-stone-300 hover:text-emerald-400 hover:border-emerald-400 transition-colors"
             title="Edit listing"
           >
-            <Pencil size={12} />
+            <Pencil size={16} />
           </button>
         )}
         {onDelete && (
           <button
             onClick={() => onDelete(item)}
-            className="w-7 h-7 rounded-full bg-stone-950/80 border border-stone-700 flex items-center justify-center text-stone-300 hover:text-red-400 hover:border-red-400 transition-colors"
+            className="w-10 h-10 rounded-full bg-stone-950/80 border border-stone-700 flex items-center justify-center text-stone-300 hover:text-red-400 hover:border-red-400 transition-colors"
             title="Delete listing"
           >
-            <Trash2 size={13} />
+            <Trash2 size={16} />
           </button>
         )}
       </div>
@@ -86,7 +86,7 @@ export default function ItemCard({ item, compact, onDelete, onEdit, onLike, onSa
               e.stopPropagation();
               onViewOwner(item.owner_id);
             }}
-            className="text-[11px] text-emerald-400 font-bold hover:underline mt-0.5"
+            className="text-xs text-emerald-400 font-bold hover:underline mt-0.5 py-1 -my-1"
           >
             {item.owner}
           </button>
@@ -103,21 +103,21 @@ export default function ItemCard({ item, compact, onDelete, onEdit, onLike, onSa
           )}
         </div>
         {(onLike || onSave) && (
-          <div className="flex items-center gap-2 mt-2 pt-2 border-t border-stone-800">
+          <div className="flex items-center gap-3 mt-2 pt-2 border-t border-stone-800">
             {onLike && (
               <button
                 onClick={() => onLike(item)}
-                className={`flex items-center gap-1 text-xs font-bold ${liked ? "text-red-400" : "text-stone-500"}`}
+                className={`flex items-center gap-1.5 text-sm font-bold py-2 pr-2 -my-2 ${liked ? "text-red-400" : "text-stone-500"}`}
               >
-                <Heart size={15} fill={liked ? "currentColor" : "none"} /> {liked ? "Liked" : "Like"}
+                <Heart size={19} fill={liked ? "currentColor" : "none"} /> {liked ? "Liked" : "Like"}
               </button>
             )}
             {onSave && (
               <button
                 onClick={() => onSave(item)}
-                className={`flex items-center gap-1 text-xs font-bold ${saved ? "text-amber-400" : "text-stone-500"}`}
+                className={`flex items-center gap-1.5 text-sm font-bold py-2 pr-2 -my-2 ${saved ? "text-amber-400" : "text-stone-500"}`}
               >
-                <Bookmark size={14} fill={saved ? "currentColor" : "none"} /> {saved ? "Saved" : "Save"}
+                <Bookmark size={18} fill={saved ? "currentColor" : "none"} /> {saved ? "Saved" : "Save"}
               </button>
             )}
           </div>
