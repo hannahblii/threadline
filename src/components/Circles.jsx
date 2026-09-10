@@ -154,6 +154,8 @@ export default function Circles({ session, campus, onViewProfile }) {
   const [isPrivate, setIsPrivate] = useState(false);
   const [loading, setLoading] = useState(true);
   const [actionError, setActionError] = useState("");
+  const [likedIds, setLikedIds] = useState(new Set());
+  const [savedIds, setSavedIds] = useState(new Set());
 
   async function loadCircles() {
     if (!campus) return; // wait until we know which campus to scope to
@@ -274,13 +276,50 @@ export default function Circles({ session, campus, onViewProfile }) {
       ? itemsQuery.or(`circle_id.eq.${circle.id},circle_id.is.null`)
       : itemsQuery.eq("circle_id", circle.id);
 
-    const { data } = await itemsQuery;
+    const [{ data }, { data: swipes }, { data: saves }] = await Promise.all([
+      itemsQuery,
+      supabase.from("swipes").select("item_id").eq("user_id", userId).eq("direction", "like"),
+      supabase.from("saves").select("item_id").eq("user_id", userId),
+    ]);
     setActiveItems((data || []).map((i) => ({ ...i, owner: i.profiles?.name, dorm: i.profiles?.dorm })));
+    setLikedIds(new Set((swipes || []).map((s) => s.item_id)));
+    setSavedIds(new Set((saves || []).map((s) => s.item_id)));
 
     if (circle.is_private && myCircleIds.has(circle.id)) {
       const { data: codeRow } = await supabase.from("circle_codes").select("code").eq("circle_id", circle.id).maybeSingle();
       setCircleCode(codeRow?.code || "");
     }
+  }
+
+  async function handleLike(item) {
+    const alreadyLiked = likedIds.has(item.id);
+    const direction = alreadyLiked ? "pass" : "like";
+    const { error } = await supabase.rpc("record_swipe_and_match", { p_item_id: item.id, p_direction: direction });
+    if (error) {
+      console.error(error);
+      return;
+    }
+    setLikedIds((prev) => {
+      const next = new Set(prev);
+      if (alreadyLiked) next.delete(item.id);
+      else next.add(item.id);
+      return next;
+    });
+  }
+
+  async function handleSave(item) {
+    const alreadySaved = savedIds.has(item.id);
+    if (alreadySaved) {
+      await supabase.from("saves").delete().eq("user_id", userId).eq("item_id", item.id);
+    } else {
+      await supabase.from("saves").insert({ user_id: userId, item_id: item.id });
+    }
+    setSavedIds((prev) => {
+      const next = new Set(prev);
+      if (alreadySaved) next.delete(item.id);
+      else next.add(item.id);
+      return next;
+    });
   }
 
   if (active) {
@@ -365,7 +404,18 @@ export default function Circles({ session, campus, onViewProfile }) {
         <p className="text-sm text-stone-500 mb-2">items here are only visible to this circle</p>
         <div className="grid grid-cols-2 gap-3">
           {activeItems.length ? (
-            activeItems.map((i) => <ItemCard key={i.id} item={i} compact onViewOwner={onViewProfile} />)
+            activeItems.map((i) => (
+              <ItemCard
+                key={i.id}
+                item={i}
+                compact
+                onViewOwner={onViewProfile}
+                onLike={handleLike}
+                onSave={handleSave}
+                liked={likedIds.has(i.id)}
+                saved={savedIds.has(i.id)}
+              />
+            ))
           ) : (
             <p className="text-sm text-stone-500 col-span-2">No items listed in this circle yet.</p>
           )}

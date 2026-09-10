@@ -157,6 +157,8 @@ export default function App() {
 
   function goToTab(id) {
     if (id === "notifications") setUnreadCount(0); // optimistic — they're about to read them
+    setViewingProfileId(null);
+    setEditingOwnProfile(false);
     setTab(id);
   }
 
